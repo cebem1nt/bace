@@ -5,6 +5,7 @@
 #ifndef _BACE_SPAN_H
 #define _BACE_SPAN_H
 
+#include <ctype.h>
 #include <string.h>
 #include <stddef.h>
 #include <stdlib.h>
@@ -20,24 +21,8 @@
 
 #define SPAN(cstr) (span_t){cstr, sizeof(cstr) - 1} // Compile time, at runtime use span_from_cstr
 #define SPAN_IS_EMPTY(span) (((span)->ptr == NULL) && ((span)->length == 0))
-#define SPAN_TRIM(span) do { SPAN_LTRIM(span); SPAN_RTRIM(span); } while (0)
 
-#define SPAN_LTRIM(span) do {                                       \
-    while((span)->length > 0) {                                     \
-        if (!isspace(*(span)->ptr))                                 \
-            break;                                                  \
-        (span)->ptr++;                                              \
-        (span)->length--;                                           \
-    }                                                               \
-} while (0)
-
-#define SPAN_RTRIM(span) do {                                       \
-    while((span)->length > 0) {                                     \
-        if (!isspace((span)->ptr[(span)->length - 1]))              \
-            break;                                                  \
-        (span)->length--;                                           \
-    }                                                               \
-} while (0)
+#define span_trim(span) do { span_ltrim(span); span_rtrim(span); } while (0)
 
 typedef struct span {
     char* ptr;
@@ -53,10 +38,13 @@ bool span_starts_with(span_t s, span_t expected);
 bool span_ends_with(span_t s, span_t expected);
 
 char* span_to_cstr(span_t s);
+void span_ltrim(span_t* s);
+void span_rtrim(span_t* s);
 
 #ifdef BACE_IMPLEMENTATION
 
-char* span_to_cstr(span_t s) {
+char* span_to_cstr(span_t s)
+{
     char* out = (char*) malloc(s.length + 1);
     if (!out) 
         return NULL;
@@ -67,7 +55,8 @@ char* span_to_cstr(span_t s) {
     return out;
 }
 
-span_t span_from_cstr(char* cstr) {
+span_t span_from_cstr(char* cstr) 
+{
     span_t span = {
         cstr,
         cstr ? strlen(cstr) : 0 
@@ -75,28 +64,32 @@ span_t span_from_cstr(char* cstr) {
     return span;
 }
 
-bool span_iseq(span_t a, span_t b) {
+bool span_iseq(span_t a, span_t b) 
+{
     if (a.length != b.length)
         return false;
 
     return strncmp(a.ptr, b.ptr, a.length) == 0;
 }
 
-bool span_case_iseq(span_t a, span_t b) {
+bool span_case_iseq(span_t a, span_t b) 
+{
     if (a.length != b.length)
         return false;
 
     return strncasecmp(a.ptr, b.ptr, a.length) == 0;
 }
 
-bool span_starts_with(span_t s, span_t expected) {
+bool span_starts_with(span_t s, span_t expected) 
+{
     if (expected.length > s.length)
         return false;
 
     return strncmp(s.ptr, expected.ptr, expected.length) == 0;
 }
 
-bool span_ends_with(span_t s, span_t expected) {
+bool span_ends_with(span_t s, span_t expected) 
+{
     if (expected.length > s.length)
         return false;
 
@@ -104,7 +97,8 @@ bool span_ends_with(span_t s, span_t expected) {
     return strncmp(s.ptr, expected.ptr, expected.length) == 0;
 }
 
-span_t span_chop_by(span_t* from, char delim) {
+span_t span_chop_by(span_t* from, char delim) 
+{
     span_t out = {
         .ptr = from->ptr,
         .length = 0
@@ -127,6 +121,25 @@ span_t span_chop_by(span_t* from, char delim) {
     }
 
     return out;
+}
+
+void span_ltrim(span_t* s)
+{
+    while(s->length > 0) {
+        if (!isspace(*s->ptr))
+            break;
+        s->ptr++;
+        s->length--;
+    }
+}
+
+void span_rtrim(span_t* s)
+{
+    while(s->length > 0) {
+        if (!isspace(s->ptr[s->length - 1])) 
+            break;
+        s->length--;
+    }
 }
 
 #endif // BACE_IMPLEMENTATION
