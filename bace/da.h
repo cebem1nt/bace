@@ -19,14 +19,14 @@
     assert((da)->arr && "Could not alloc array, no memory");    \
 } while(0)
 
-#define DA_APPEND(da, item) do {                                        \
+#define DA_APPEND(da, ...) do {                                         \
     if ((da)->len >= (da)->cap) {                                       \
         (da)->cap = (da)->cap ? (da)->cap * 2                           \
                               : DA_DEFAULT_CAP;                         \
         (da)->arr = realloc((da)->arr, (da)->cap * sizeof(*(da)->arr)); \
         assert((da)->arr && "Could not realloc array, no memory");      \
     }                                                                   \
-    (da)->arr[(da)->len++] = item;                                      \
+    (da)->arr[(da)->len++] = __VA_ARGS__;                               \
 } while(0) 
 
 #define DA_POP(da) (da)->arr[--(da)->len]
