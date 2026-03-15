@@ -1,5 +1,5 @@
 #include "./bace/span.h"
-#include <stdlib.h>
+#include "./bace/da.h"
 
 #define error_abort(fmt, ...) do {          \
     fprintf(stderr, fmt, __VA_ARGS__);      \
