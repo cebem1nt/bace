@@ -7,6 +7,7 @@
 
 #include <string.h>
 #include <stddef.h>
+#include <stdlib.h>
 #include <stdbool.h>
 
 #if defined(__STDC_VERSION__) && __STDC_VERSION__ >= 201112L
@@ -51,7 +52,20 @@ bool span_case_iseq(span_t a, span_t b);
 bool span_starts_with(span_t s, span_t expected);
 bool span_ends_with(span_t s, span_t expected);
 
-#ifdef  BACE_IMPLEMENTATION
+char* span_to_cstr(span_t s);
+
+#ifdef BACE_IMPLEMENTATION
+
+char* span_to_cstr(span_t s) {
+    char* out = (char*) malloc(s.length + 1);
+    if (!out) 
+        return NULL;
+
+    memcpy(out, s.ptr, s.length);
+    out[s.length] = '\0';
+
+    return out;
+}
 
 span_t span_from_cstr(char* cstr) {
     span_t span = {
