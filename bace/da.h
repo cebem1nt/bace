@@ -4,6 +4,9 @@
  * This is the most flexible way of doing this.
  */
 
+#ifndef _BACE_DA_H
+#define _BACE_DA_H
+
 #include <assert.h>
 #include <stdlib.h>
 
@@ -30,3 +33,5 @@
 } while(0) 
 
 #define DA_POP(da) (da)->arr[--(da)->len]
+
+#endif // _BACE_DA_H

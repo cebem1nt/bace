@@ -1,12 +1,8 @@
+#ifndef _BACE_MAIN_H
+#define _BACE_MAIN_H
+
 #include "./bace/span.h"
 #include "./bace/da.h"
+#include "./bace/misc.h"
 
-#define error_abort(fmt, ...) do {          \
-    fprintf(stderr, fmt, __VA_ARGS__);      \
-    exit(1);                                \
-} while(0)
-
-#define perror_abort(msg) do {              \
-    perror(msg);                            \
-    exit(1);                                \
-} while(0)
+#endif // _BACE_MAIN_H
