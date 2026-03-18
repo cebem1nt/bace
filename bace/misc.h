@@ -18,32 +18,43 @@
 } while(0)
 
 #ifdef BACE_IMPLEMENTATION
-char* readfile(const char* fp, size_t* out_size) 
+
+char* readfile(const char* fname, size_t* out_size) 
 {
+    char*  out = NULL;
     size_t fsize;
-    char*  out;
     int    fd;
     
-    if (open(fp, O_RDONLY) == -1) {
+    if ((fd = open(fname, O_RDONLY)) == -1) {
         perror("open");
-        return NULL;   
+        goto _exit;
     }
 
-    fsize = lseek(fd, 0, SEEK_END);
-    lseek(fd, 0, SEEK_SET);
+    if ((fsize = lseek(fd, 0, SEEK_END)) == -1) {
+        perror("open");
+        goto _exit;
+    };
 
-    if ((out = (char*) malloc(fsize)) == NULL)
-        return NULL;
+    if (lseek(fd, 0, SEEK_SET) == -1) {
+        perror("open");
+        goto _exit;
+    }; 
+
+    if ((out = (char*) malloc(fsize)) == NULL) {
+        goto _exit;
+    }
 
     if (read(fd, out, fsize) == -1) {
         perror("read");
         free(out);
-        return NULL;
+        goto _exit;
     }
 
     if (out_size)
         *out_size = fsize;
 
+_exit:
+    close(fd);
     return out;
 }
 
