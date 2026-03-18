@@ -38,8 +38,11 @@ bool span_starts_with(span_t s, span_t expected);
 bool span_ends_with(span_t s, span_t expected);
 
 char* span_to_cstr(span_t s);
-void span_ltrim(span_t* s);
-void span_rtrim(span_t* s);
+size_t span_ltrim(span_t* s);
+size_t span_rtrim(span_t* s);
+
+size_t span_ltrims(span_t* s1, span_t s2);
+size_t span_rtrims(span_t* s1, span_t s2);
 
 #ifdef BACE_IMPLEMENTATION
 
@@ -123,23 +126,57 @@ span_t span_chop_by(span_t* from, char delim)
     return out;
 }
 
-void span_ltrim(span_t* s)
+size_t span_ltrim(span_t* s)
 {
+    size_t n = 0;
+ 
     while(s->length > 0) {
         if (!isspace(*s->ptr))
             break;
         s->ptr++;
         s->length--;
+        n++;
     }
+
+    return n;
 }
 
-void span_rtrim(span_t* s)
+size_t span_rtrim(span_t* s) 
 {
+    size_t n = 0;
+
     while(s->length > 0) {
         if (!isspace(s->ptr[s->length - 1])) 
             break;
         s->length--;
+        n++;
     }
+
+    return n;
+}
+
+size_t span_ltrims(span_t* s1, span_t s2) 
+{
+    size_t n = 0;
+
+    while (span_starts_with(*s1, s2)) {
+        s1->ptr += s2.length;
+        n++;
+    }
+
+    return n;
+}
+
+size_t span_rtrims(span_t* s1, span_t s2)
+{
+    size_t n = 0;
+
+    while(span_ends_with(*s1, s2)) {
+        s1->length -= s2.length;
+        n++;
+    }
+
+    return n;
 }
 
 #endif // BACE_IMPLEMENTATION
