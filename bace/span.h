@@ -161,6 +161,7 @@ size_t span_ltrims(span_t* s1, span_t s2)
 
     while (span_starts_with(*s1, s2)) {
         s1->ptr += s2.length;
+        s1->length -= s2.length;
         n++;
     }
 
