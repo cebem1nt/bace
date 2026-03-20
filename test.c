@@ -19,7 +19,7 @@ int main()
     printf("Span: "SPAN_FMT"\n", SPAN_ARG(choped));
 
     struct da_ints ints;
-    DA_INIT(&ints, int, 1);
+    DA_INIT(&ints);
 
     DA_APPEND(&ints, 2);
     DA_APPEND(&ints, 3);

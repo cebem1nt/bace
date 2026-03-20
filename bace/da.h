@@ -12,15 +12,19 @@
 
 #define DA_DEFAULT_CAP 10
 
-#define DA_INIT(da, type, capacity) do {                        \
+#define DA_INIT_CAP(da, capacity) do {                          \
     size_t cap = (capacity) ? (capacity)                        \
                             : DA_DEFAULT_CAP;                   \
                                                                 \
     (da)->len = 0;                                              \
     (da)->cap = cap;                                            \
-    (da)->arr = malloc(cap * sizeof(type));                     \
+    (da)->arr = malloc(cap * sizeof(*(da)->arr));               \
     assert((da)->arr && "Could not alloc array, no memory");    \
 } while(0)
+
+#define DA_INIT_NOCAP(da) DA_INIT_CAP(da, DA_DEFAULT_CAP)
+#define __DA_PARAMS_MATCH_MACRO(_1, _2, MACRO, ...) MACRO
+#define DA_INIT(...) __DA_PARAMS_MATCH_MACRO(__VA_ARGS__, DA_INIT_CAP, DA_INIT_NOCAP)(__VA_ARGS__)
 
 #define DA_APPEND(da, ...) do {                                         \
     if ((da)->len >= (da)->cap) {                                       \
