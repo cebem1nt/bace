@@ -15,14 +15,18 @@
 # include <strings.h>  /* strncasecmp (-std=c11) */
 #endif
 
-#define SPAN_FMT "%.*s"
-#define SPAN_ARG(span) (int)(span).length, (span).ptr
 #define SPAN_EMPTY (span_t){NULL, 0}
 
-#define SPAN(cstr) (span_t){cstr, sizeof(cstr) - 1} // Compile time, at runtime use span_from_cstr
-#define SPAN_IS_EMPTY(span) (((span)->ptr == NULL) && ((span)->length == 0))
+#define SPAN_FMT "%.*s"
+#define SPAN_ARG(span) (int)(span).length, (span).ptr
 
-#define span_trim(span) do { span_ltrim(span); span_rtrim(span); } while (0)
+#define SPAN(cstr) (span_t){cstr, sizeof(cstr) - 1} // Compile time, at runtime use span_from_cstr
+
+#define SPAN_IS_EMPTY(span) \
+    (((span)->ptr == NULL) && ((span)->length == 0))
+
+#define span_trim(span) \
+    do { span_ltrim(span); span_rtrim(span); } while (0)
 
 typedef struct span {
     char* ptr;
@@ -38,11 +42,20 @@ bool span_starts_with(span_t s, span_t expected);
 bool span_ends_with(span_t s, span_t expected);
 
 char* span_to_cstr(span_t s);
+
+// Takes s, returns n whitespaces trimmed
 size_t span_ltrim(span_t* s);
+
+// Takes s, returns n whitespaces trimmed
 size_t span_rtrim(span_t* s);
 
+// Takes s1, s2, returns n times s2 was trimmed from s1
 size_t span_ltrims(span_t* s1, span_t s2);
+
+// Takes s1, s2, returns n times s2 was trimmed from s1 
 size_t span_rtrims(span_t* s1, span_t s2);
+
+ssize_t span_finds(span_t haystack, span_t needle);
 
 #ifdef BACE_IMPLEMENTATION
 
@@ -178,6 +191,25 @@ size_t span_rtrims(span_t* s1, span_t s2)
     }
 
     return n;
+}
+
+ssize_t span_finds(span_t haystack, span_t needle) 
+{
+    ssize_t pos = 0;
+
+    while (pos + needle.length <= haystack.length) {
+        span_t remaining = {
+            haystack.ptr + pos,
+            haystack.length - pos
+        };
+        
+        if (span_starts_with(remaining, needle))
+            return pos;
+        
+        pos += needle.length;
+    }
+
+    return -1;
 }
 
 #endif // BACE_IMPLEMENTATION
