@@ -12,6 +12,21 @@
 
 #define DA_DEFAULT_CAP 10
 
+typedef struct {
+    size_t len, cap;
+    int* arr;
+} int_da_t;
+
+typedef struct {
+    size_t len, cap;
+    float* arr;
+} float_da_t;
+
+typedef struct {
+    size_t len, cap;
+    double* arr;
+} double_da_t;
+
 #define DA_INIT_CAP(da, capacity) do {                          \
     size_t cap = (capacity) ? (capacity)                        \
                             : DA_DEFAULT_CAP;                   \
