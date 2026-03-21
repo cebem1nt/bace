@@ -55,9 +55,19 @@ size_t span_ltrims(span_t* s1, span_t s2);
 // Takes s1, s2, returns n times s2 was trimmed from s1 
 size_t span_rtrims(span_t* s1, span_t s2);
 
+// Find needle in haystack, returns -1 if not found
 ssize_t span_finds(span_t haystack, span_t needle);
 
+// Advance n chars from s.ptr, doesn't check bounds
+size_t span_advance(span_t* s, size_t n);
+
 #ifdef BACE_IMPLEMENTATION
+
+size_t span_advance(span_t *s, size_t n) 
+{
+    s->ptr += n;
+    s->length -= n;
+}
 
 char* span_to_cstr(span_t s)
 {
