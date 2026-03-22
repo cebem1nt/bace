@@ -33,14 +33,14 @@ char* readfile(const char* fname, size_t* out_size)
     if ((fsize = lseek(fd, 0, SEEK_END)) == -1) {
         perror("open");
         goto _exit;
-    };
+    }
 
     if (lseek(fd, 0, SEEK_SET) == -1) {
         perror("open");
         goto _exit;
-    }; 
+    }
 
-    if ((out = (char*) malloc(fsize)) == NULL) {
+    if ((out = (char*) malloc(fsize + 1)) == NULL) {
         goto _exit;
     }
 
@@ -53,10 +53,12 @@ char* readfile(const char* fname, size_t* out_size)
     if (out_size)
         *out_size = fsize;
 
+    out[fsize] = '\0';
 _exit:
     close(fd);
     return out;
 }
+
 
 #endif // BACE_IMPLEMENTATION
 #endif // _BACE_MISC_H
