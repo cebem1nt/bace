@@ -17,6 +17,16 @@
     exit(1);                                \
 } while(0)
 
+#define pperror_exit() do  {                \
+    perror(PROGRAM_NAME);                   \
+    exit(1);                                \
+} while(0)
+
+#define help_exit(program) do  {            \
+    printf(HELP, program);                  \
+    exit(1);                                \
+} while(0)
+
 #ifdef BACE_IMPLEMENTATION
 
 char* readfile(const char* fname, size_t* out_size) 
@@ -31,12 +41,12 @@ char* readfile(const char* fname, size_t* out_size)
     }
 
     if ((fsize = lseek(fd, 0, SEEK_END)) == -1) {
-        perror("open");
+        perror("lseek");
         goto _exit;
     }
 
     if (lseek(fd, 0, SEEK_SET) == -1) {
-        perror("open");
+        perror("lseek");
         goto _exit;
     }
 
