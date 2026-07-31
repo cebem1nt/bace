@@ -17,11 +17,6 @@
     exit(1);                                \
 } while(0)
 
-#define pperror_exit() do  {                \
-    perror(PROGRAM_NAME);                   \
-    exit(1);                                \
-} while(0)
-
 #define help_exit(program) do  {            \
     printf(HELP, program);                  \
     exit(1);                                \
@@ -29,13 +24,13 @@
 
 #ifdef BACE_IMPLEMENTATION
 
-char* readfile(const char* fname, size_t* out_size) 
+char* readfile(const char* filename, size_t* out_size) 
 {
     char*  out = NULL;
     size_t fsize;
     int    fd;
     
-    if ((fd = open(fname, O_RDONLY)) == -1) {
+    if ((fd = open(filename, O_RDONLY)) == -1) {
         perror("open");
         goto _exit;
     }
