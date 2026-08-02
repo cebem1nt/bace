@@ -18,18 +18,18 @@
 # include <strings.h>  /* strncasecmp (-std=c11) */
 #endif
 
-#define SPAN_EMPTY (span_t){NULL, 0}
-
-#define SPAN_FMT "%.*s"
+#define SPAN_FMT       "%.*s"
+#define SPAN_EMPTY     (span_t){NULL, 0}
 #define SPAN_ARG(span) (int)(span).length, (span).ptr
-
-#define SPAN(cstr) (span_t){cstr, sizeof(cstr) - 1} // Compile time, at runtime use span_from_cstr
+#define SPAN(cstr)     (span_t){cstr, sizeof(cstr) - 1} // Compile time, at runtime use span_from_cstr
 
 #define SPAN_IS_EMPTY(span) \
     (((span)->ptr == NULL) && ((span)->length == 0))
 
-#define span_trim(span) \
-    do { span_ltrim(span); span_rtrim(span); } while (0)
+#define span_trim(span) do {    \
+    span_ltrim(span);           \
+    span_rtrim(span);           \
+ } while (0)
 
 typedef struct span {
     char* ptr;
@@ -46,10 +46,12 @@ bool span_ends_with(span_t s, span_t expected);
 
 char* span_to_cstr(span_t s);
 
-// Takes s, returns n whitespaces trimmed
+// Trim all leading whitespaces from s
+// returns N whitespaces trimmed
 size_t span_ltrim(span_t* s);
 
-// Takes s, returns n whitespaces trimmed
+// Trim all trailing whitespaces from s
+// returns N whitespaces trimmed
 size_t span_rtrim(span_t* s);
 
 // Takes s1, s2, returns n times s2 was trimmed from s1

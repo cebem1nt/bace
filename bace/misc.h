@@ -9,17 +9,17 @@
 
 #define error_exit(...) do {                \
     fprintf(stderr, __VA_ARGS__);           \
-    exit(1);                                \
+    exit(EXIT_FAILURE);                     \
 } while(0)
 
 #define perror_exit(msg) do  {              \
     perror(msg);                            \
-    exit(1);                                \
+    exit(EXIT_FAILURE);                     \
 } while(0)
 
 #define help_exit(program) do  {            \
     printf(HELP, program);                  \
-    exit(1);                                \
+    exit(EXIT_FAILURE);                     \
 } while(0)
 
 #ifdef BACE_IMPLEMENTATION
