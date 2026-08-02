@@ -42,6 +42,8 @@
 *.idb
 *.pdb
 
+*.tmp
+
 # Kernel Module Compile Results
 *.mod*
 *.cmd
@@ -53,3 +55,6 @@ dkms.conf
 
 # debug information files
 *.dwo
+
+dest/
+out/
