@@ -47,11 +47,11 @@ bool span_ends_with(span_t s, span_t expected);
 char* span_to_cstr(span_t s);
 
 // Trim all leading whitespaces from s
-// returns N whitespaces trimmed
+// Returns N whitespaces trimmed
 size_t span_ltrim(span_t* s);
 
 // Trim all trailing whitespaces from s
-// returns N whitespaces trimmed
+// Returns N whitespaces trimmed
 size_t span_rtrim(span_t* s);
 
 // Takes s1, s2, returns n times s2 was trimmed from s1
@@ -63,15 +63,20 @@ size_t span_rtrims(span_t* s1, span_t s2);
 // Find needle in haystack, returns -1 if not found
 ssize_t span_finds(span_t haystack, span_t needle);
 
-// Advance n chars from s.ptr, doesn't check bounds
+// Advance n chars for given s
+// Returns N chars advances
 size_t span_advance(span_t* s, size_t n);
 
 #ifdef BACE_IMPLEMENTATION
 
-size_t span_advance(span_t *s, size_t n) 
+size_t span_advance(span_t* s, size_t n) 
 {
+    if (n > s->length)
+        return 0;
+
     s->ptr += n;
     s->length -= n;
+    return n;
 }
 
 char* span_to_cstr(span_t s)
