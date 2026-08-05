@@ -27,7 +27,7 @@
 char* readfile(const char* filename, size_t* out_size) 
 {
     char*  out = NULL;
-    size_t fsize;
+    off_t  fsize;
     int    fd;
     
     if ((fd = open(filename, O_RDONLY)) == -1) {

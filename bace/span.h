@@ -232,43 +232,5 @@ ssize_t span_finds(span_t haystack, span_t needle)
     return -1;
 }
 
-span_t span_readf(const char* filename) 
-{
-    size_t fsize;
-    span_t out;
-    int    fd;
-    
-    if ((fd = open(filename, O_RDONLY)) == -1) {
-        perror("open");
-        goto _exit;
-    }
-
-    if ((fsize = lseek(fd, 0, SEEK_END)) == -1) {
-        perror("lseek");
-        goto _exit;
-    }
-
-    if (lseek(fd, 0, SEEK_SET) == -1) {
-        perror("lseek");
-        goto _exit;
-    }
-
-    if ((out.ptr = (char*) malloc(fsize + 1)) == NULL) {
-        goto _exit;
-    }
-
-    if (read(fd, out.ptr, fsize) == -1) {
-        perror("read");
-        free(out.ptr);
-        goto _exit;
-    }
-
-    out.length = fsize;
-
-_exit:
-    close(fd);
-    return out;
-}
-
 #endif // BACE_IMPLEMENTATION
 #endif // _BACE_SPAN_H
